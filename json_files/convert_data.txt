@@ -1,0 +1,15 @@
+#convert basic line data to GeoJSON & convert to geographic projection
+ogr2ogr -f GeoJSON lines.json -s_srs "EPSG:900913" -t_srs "EPSG:4326" lines.shp
+
+#convert spatial logo to GeoJSON & convert to geographic projection
+ogr2ogr -f GeoJSON webgen_logo.json -s_srs "EPSG:900913" -t_srs "EPSG:4326" webgen_logo.shp
+
+#clip basic line data with spatial logo & convert to GeoJSON & convert to geographic projection
+ogr2ogr -clipsrc webgen_logo.shp -s_srs "EPSG:900913" -t_srs "EPSG:4326" -f GeoJSON geo_logo.json lines.shp
+
+#you can also do it manually...
+ogr2ogr -f GeoJSON geo_logo.json -s_srs "EPSG:900913" -t_srs "EPSG:4326" geo_logo.shp
+
+
+#wrap all 3 GeoJSON-files into one TopoJSON-file
+topojson -o webgen_topo.json lines.json geo_logo.json webgen_logo.json
